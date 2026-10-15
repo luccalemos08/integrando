@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integrando — ∫ estudo dt = aprendizado</title>
+<meta name="description" content="Aulas particulares de Matemática, Física e Química para ensino fundamental e médio. Metodologia personalizada com Lucca Lemos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#4A90D9;--blue-d:#2563EB;--blue-dd:#1e40af;
+  --blue-l:#dbeafe;--blue-ll:#eff6ff;
+  --purple:#7c3aed;--purple-l:#ede9fe;
+  --mat:#4A90D9;--fis:#f59e0b;--qui:#10b981;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --bg:#f8fafc;--card:#fff;
+  --r:16px;--r-sm:10px;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 6px -1px rgba(0,0,0,.07),0 2px 4px -2px rgba(0,0,0,.05);
+  --shadow-lg:0 10px 15px -3px rgba(0,0,0,.08),0 4px 6px -4px rgba(0,0,0,.04);
+  --shadow-xl:0 20px 25px -5px rgba(0,0,0,.08),0 8px 10px -6px rgba(0,0,0,.04);
+}
+html{scroll-behavior:smooth;font-size:17px}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--text);background:var(--bg);line-height:1.7;overflow-x:hidden}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:900;line-height:1.15;letter-spacing:-.03em}
+h2{font-size:clamp(1.5rem,3.5vw,2.2rem);font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.15rem;font-weight:700}
+a{color:var(--blue-d);text-decoration:none;transition:.2s}
+a:hover{color:var(--blue-dd)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+/* ── Sections ────────────── */
+.sec{padding:5rem 1.5rem;position:relative}
+.sec-inner{max-width:960px;margin:0 auto;width:100%}
+.sec-label{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--blue-d);background:var(--blue-l);padding:.3rem .8rem;border-radius:50px;
+  margin-bottom:1rem;
+}
+.sec-title{margin-bottom:.6rem}
+.sec-subtitle{color:var(--text2);font-size:1.05rem;max-width:600px;margin-bottom:2.5rem;line-height:1.6}
+
+/* ── Wave dividers ───────── */
+.wave{position:relative;overflow:hidden;line-height:0}
+.wave svg{display:block;width:100%;height:auto;min-height:40px}
+.wave-blue svg{fill:var(--bg)}
+.wave-white svg{fill:#fff}
+
+/* ── Hero ────────────────── */
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 40%,#1e40af 100%);
+  color:#fff;padding:6rem 1.5rem 8rem;text-align:center;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'∫';position:absolute;right:-5%;top:-10%;
+  font-size:clamp(20rem,50vw,45rem);font-weight:900;font-style:italic;
+  color:rgba(74,144,217,.06);line-height:1;pointer-events:none;
+}
+.hero-glow{
+  position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(74,144,217,.15) 0%,transparent 70%);
+  top:-200px;left:50%;transform:translateX(-50%);pointer-events:none;
+}
+/* Hero split layout */
+.hero-grid{
+  display:grid;grid-template-columns:1fr;gap:2.5rem;align-items:center;
+  text-align:center;
+}
+@media(min-width:768px){
+  .hero-grid{grid-template-columns:auto 1fr;text-align:left;gap:3.5rem}
+  .hero-grid .hero-text .hero-subjects{justify-content:flex-start}
+  .hero-grid .hero-text div:last-child{justify-content:flex-start}
+}
+.hero-photo-wrap{
+  position:relative;z-index:1;display:flex;justify-content:center;
+}
+/* Animated gradient ring */
+.hero-ring{
+  position:relative;width:220px;height:220px;
+}
+.hero-ring::before{
+  content:'';position:absolute;inset:-6px;border-radius:50%;
+  background:conic-gradient(from 0deg,var(--blue),var(--purple),var(--blue-d),var(--blue));
+  animation:ringRotate 8s linear infinite;
+  opacity:.6;
+}
+@keyframes ringRotate{to{transform:rotate(360deg)}}
+.hero-ring::after{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:linear-gradient(135deg,#0f172a,#1e3a5f);
+}
+.hero-photo{
+  width:208px;height:208px;border-radius:50%;object-fit:cover;
+  position:absolute;inset:6px;z-index:2;
+}
+/* Floating subject orbs */
+.hero-orb{
+  position:absolute;z-index:3;
+  width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;font-weight:700;
+  box-shadow:0 4px 15px rgba(0,0,0,.25);
+  animation:orbFloat 4s ease-in-out infinite;
+  backdrop-filter:blur(4px);
+}
+.hero-orb svg{width:20px;height:20px;color:#fff}
+.hero-orb-mat{background:rgba(74,144,217,.85);top:5%;right:-8px;animation-delay:0s}
+.hero-orb-fis{background:rgba(245,158,11,.85);bottom:10%;right:-12px;animation-delay:1.3s}
+.hero-orb-qui{background:rgba(16,185,129,.85);bottom:5%;left:-10px;animation-delay:2.6s}
+@keyframes orbFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+.hero-brand{
+  font-size:clamp(2.5rem,6vw,4rem);font-weight:900;letter-spacing:-.03em;
+  background:linear-gradient(135deg,#fff 0%,#93c5fd 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;position:relative;z-index:1;
+}
+.hero-brand .int{font-style:italic;font-weight:400;opacity:.8}
+.hero-slogan{
+  font-family:'JetBrains Mono',monospace;font-size:clamp(.85rem,2vw,1.1rem);
+  color:rgba(147,197,253,.8);margin:.8rem 0 2rem;position:relative;z-index:1;
+}
+.hero-desc{
+  font-size:1.05rem;color:rgba(255,255,255,.75);max-width:550px;margin:0 auto 2.5rem;
+  line-height:1.7;position:relative;z-index:1;
+}
+.hero-subjects{
+  display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-bottom:2.5rem;
+  position:relative;z-index:1;
+}
+.hero-subj{
+  display:inline-flex;align-items:center;gap:.4rem;
+  padding:.45rem 1rem;border-radius:50px;font-weight:600;font-size:.85rem;
+  background:rgba(255,255,255,.1);color:rgba(255,255,255,.9);
+  backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);
+}
+.hero-subj svg{width:16px;height:16px}
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.8rem 1.8rem;border-radius:50px;font-weight:700;font-size:.95rem;
+  text-decoration:none;transition:all .25s;cursor:pointer;border:none;position:relative;z-index:1;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg);text-decoration:none}
+.btn-light{background:#fff;color:var(--blue-dd)}
+.btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1.5px solid rgba(255,255,255,.25)}
+.btn-ghost:hover{background:rgba(255,255,255,.2);color:#fff}
+.btn-blue{background:var(--blue-d);color:#fff}
+.btn-blue:hover{background:var(--blue-dd)}
+.btn-wpp{background:#25D366;color:#fff}
+.btn-wpp:hover{background:#1da851}
+
+/* ── Timeline ────────────── */
+.tl-grid{display:grid;gap:1.5rem}
+.tl-card{
+  display:grid;grid-template-columns:56px 1fr;gap:1.2rem;
+  background:var(--card);border-radius:var(--r);padding:1.5rem;
+  box-shadow:var(--shadow);border:1px solid #e2e8f0;
+  cursor:pointer;transition:all .25s;
+}
+.tl-card:hover{box-shadow:var(--shadow-md);border-color:var(--blue);transform:translateY(-2px)}
+.tl-icon{
+  width:56px;height:56px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;flex-shrink:0;
+}
+.tl-card:nth-child(1) .tl-icon{background:var(--blue-l);color:var(--blue-d)}
+.tl-card:nth-child(2) .tl-icon{background:var(--purple-l);color:var(--purple)}
+.tl-card:nth-child(3) .tl-icon{background:#dcfce7;color:#16a34a}
+.tl-card:nth-child(4) .tl-icon{background:#fef3c7;color:#d97706}
+.tl-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:.15rem}
+.tl-title{font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:.5rem}
+.tl-title .arr{color:var(--blue);font-size:.7rem;transition:transform .25s}
+.tl-card.open .arr{transform:rotate(90deg)}
+.tl-detail{
+  max-height:0;overflow:hidden;transition:max-height .4s ease,opacity .3s;
+  opacity:0;grid-column:1/-1;color:var(--text2);font-size:.9rem;line-height:1.7;
+}
+.tl-card.open .tl-detail{max-height:300px;opacity:1;padding-top:.5rem}
+.tl-photo{
+  width:80px;height:80px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--blue);float:right;margin:0 0 .5rem 1rem;shape-outside:circle()
+}
+
+/* ── Real world box ──────── */
+.rw-box{
+  background:linear-gradient(135deg,var(--blue-ll) 0%,#fff 100%);
+  border:1px solid #bfdbfe;border-radius:var(--r);padding:2rem;margin-top:2rem;
+  display:grid;grid-template-columns:1fr;gap:1.5rem;
+}
+@media(min-width:640px){.rw-box{grid-template-columns:1fr auto;align-items:center}}
+.rw-box h3{color:var(--blue-dd);font-size:1.1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.rw-box h3 svg{width:24px;height:24px;color:var(--blue-d)}
+.solar-illustration{display:flex;justify-content:center;align-items:center}
+
+/* ── Methodology ─────────── */
+.meth-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem}
+.meth-card{
+  background:var(--card);border-radius:var(--r);padding:1.5rem 1.2rem;
+  text-align:center;box-shadow:var(--shadow);border:1px solid #e2e8f0;
+  cursor:pointer;transition:all .25s;position:relative;
+}
+.meth-card:hover{box-shadow:var(--shadow-md);border-color:var(--blue);transform:translateY(-3px)}
+.meth-card.open{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-l),var(--shadow-md)}
+.meth-num{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--blue-d),var(--purple));
+  color:#fff;display:inline-flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.95rem;margin-bottom:.8rem;
+}
+.meth-card h3{font-size:.9rem;margin-bottom:.3rem}
+.meth-icon{width:28px;height:28px;margin:0 auto .5rem;color:var(--blue-d)}
+.meth-detail{
+  max-height:0;overflow:hidden;transition:max-height .4s;
+  font-size:.82rem;color:var(--text2);text-align:left;line-height:1.6;
+}
+.meth-card.open .meth-detail{max-height:300px;padding-top:.8rem}
+
+/* AI Box */
+.ai-box{
+  background:linear-gradient(135deg,#1e1b4b,#312e81);
+  border-radius:var(--r);padding:2rem;color:#fff;margin-top:2rem;
+  display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:start;
+}
+.ai-icon-wrap{
+  width:48px;height:48px;border-radius:14px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;
+}
+.ai-icon-wrap svg{width:24px;height:24px;color:#fff}
+.ai-box h3{margin-bottom:.4rem;font-size:1rem}
+.ai-box p{font-size:.9rem;color:rgba(255,255,255,.8);line-height:1.6;margin:0}
+
+/* ── Content Map ─────────── */
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1.5rem}
+.fg{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center}
+.fg-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-right:.3rem}
+.fbtn{
+  padding:.4rem .9rem;border:2px solid #e2e8f0;border-radius:50px;
+  background:var(--card);color:var(--text2);font-weight:600;font-size:.8rem;
+  cursor:pointer;transition:all .2s;
+}
+.fbtn:hover{border-color:var(--blue);color:var(--blue-d)}
+.fbtn.active{background:var(--blue-d);border-color:var(--blue-d);color:#fff}
+.fbtn[data-materia="matematica"].active{background:var(--mat);border-color:var(--mat)}
+.fbtn[data-materia="fisica"].active{background:var(--fis);border-color:var(--fis)}
+.fbtn[data-materia="quimica"].active{background:var(--qui);border-color:var(--qui)}
+.chart-wrap{
+  background:var(--card);border-radius:var(--r);padding:1.5rem;
+  box-shadow:var(--shadow);border:1px solid #e2e8f0;margin-bottom:1.5rem;
+}
+.chart-wrap canvas{max-height:380px;height:340px}
+.chart-note{font-size:.7rem;color:var(--text3);text-align:center;margin-top:.6rem;font-style:italic}
+.td-card{
+  display:none;background:var(--card);border-radius:var(--r);padding:1.5rem;
+  box-shadow:var(--shadow);border:1px solid #e2e8f0;margin-bottom:1.5rem;
+  border-left:4px solid var(--blue-d);animation:fadeUp .3s ease;
+}
+.td-card.show{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.td-meta{display:flex;flex-wrap:wrap;gap:.6rem;margin:.6rem 0 .8rem;font-size:.8rem}
+.td-meta span{background:var(--blue-l);color:var(--blue-dd);padding:.2rem .6rem;border-radius:50px;font-weight:600}
+.td-q{background:var(--blue-ll);border-radius:var(--r-sm);padding:1rem;margin-top:.8rem}
+.td-q p{font-weight:600;margin-bottom:.4rem;font-size:.9rem}
+.td-q .alt{padding:.15rem 0;font-size:.85rem}
+.td-q .alt.ok{color:var(--qui);font-weight:700}
+.diff-dots{display:inline-flex;gap:3px}
+.diff-dots span{width:8px;height:8px;border-radius:50%;background:#e2e8f0}
+.diff-dots span.on{background:var(--blue-d)}
+
+/* Sub-tabs */
+.stabs{display:flex;flex-wrap:wrap;gap:.2rem;justify-content:center;margin-bottom:2rem}
+.stab{
+  padding:.5rem 1.2rem;border:none;background:transparent;
+  font-weight:600;font-size:.85rem;color:var(--text3);cursor:pointer;
+  border-bottom:3px solid transparent;transition:all .2s;border-radius:6px 6px 0 0;
+}
+.stab:hover{color:var(--blue-d);background:var(--blue-ll)}
+.stab.active{color:var(--blue-d);border-bottom-color:var(--blue-d);background:var(--blue-ll)}
+.stab-c{display:none;animation:fadeUp .3s ease}.stab-c.active{display:block}
+
+/* Comparison table */
+.cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:.8rem;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);border:1px solid #e2e8f0}
+.cmp th{background:linear-gradient(135deg,var(--blue-d),var(--blue-dd));color:#fff;padding:.8rem .6rem;text-align:left;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+.cmp td{padding:.7rem .6rem;border-bottom:1px solid #f1f5f9;vertical-align:top;background:var(--card)}
+.cmp tr:nth-child(even) td{background:var(--blue-ll)}
+.cmp tr:last-child td{border-bottom:none}
+
+/* Foundation cards */
+.found-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin-top:1.5rem}
+.found-card{
+  background:var(--card);border-radius:var(--r);padding:1.2rem;
+  box-shadow:var(--shadow);border:1px solid #e2e8f0;
+  border-top:3px solid var(--blue-d);transition:all .25s;
+}
+.found-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.found-card h4{color:var(--blue-dd);font-size:.95rem;margin-bottom:.2rem}
+.found-badge{display:inline-block;background:var(--blue-l);color:var(--blue-dd);padding:.1rem .5rem;border-radius:50px;font-size:.7rem;font-weight:700;margin-bottom:.4rem}
+.found-card p{font-size:.82rem;color:var(--text2);margin-bottom:.5rem}
+.found-arrows{display:flex;flex-wrap:wrap;gap:.3rem}
+.found-arrows span{background:linear-gradient(135deg,var(--blue-d),var(--purple));color:#fff;padding:.15rem .5rem;border-radius:50px;font-size:.65rem;font-weight:600}
+
+/* ── FAQ ──────────────────── */
+.faq-card{
+  background:var(--card);border-radius:var(--r);margin-bottom:.5rem;
+  box-shadow:var(--shadow);border:1px solid #e2e8f0;overflow:hidden;transition:all .25s;
+}
+.faq-card:hover{border-color:#cbd5e1}
+.faq-card.open{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-l)}
+.faq-q{
+  padding:1rem 1.2rem;cursor:pointer;display:grid;grid-template-columns:36px 1fr 20px;
+  align-items:center;gap:.8rem;font-weight:600;font-size:.95rem;transition:background .2s;
+}
+.faq-q:hover{background:var(--blue-ll)}
+.faq-q-icon{width:36px;height:36px;border-radius:10px;background:var(--blue-l);display:flex;align-items:center;justify-content:center}
+.faq-q-icon svg{width:18px;height:18px;color:var(--blue-d)}
+.faq-q .plus{color:var(--blue);font-size:1.2rem;font-weight:300;transition:transform .25s}
+.faq-card.open .plus{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s;font-size:.88rem;color:var(--text2);line-height:1.7}
+.faq-card.open .faq-a{max-height:400px}
+.faq-a-in{padding:0 1.2rem 1.2rem;padding-left:calc(36px + 2rem)}
+
+/* ── CTA ─────────────────── */
+.cta-sec{
+  background:linear-gradient(135deg,#1e3a5f 0%,#1e40af 50%,#4338ca 100%);
+  color:#fff;text-align:center;padding:5rem 1.5rem;position:relative;overflow:hidden;
+}
+.cta-sec::before{
+  content:'∫';position:absolute;left:-5%;bottom:-15%;
+  font-size:clamp(15rem,40vw,35rem);font-weight:900;font-style:italic;
+  color:rgba(255,255,255,.03);line-height:1;pointer-events:none;
+}
+.cta-sec h2{color:#fff}
+.cta-sec .sec-label{background:rgba(255,255,255,.15);color:rgba(255,255,255,.9)}
+.cta-btns{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin-top:2rem}
+
+/* ── Presentation mode ───── */
+.pres-ctrl{
+  position:fixed;bottom:1.2rem;right:1.2rem;display:flex;gap:.4rem;z-index:1000;
+}
+.pres-b{
+  width:40px;height:40px;border-radius:12px;border:1px solid #e2e8f0;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(8px);color:var(--text);
+  font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);transition:all .2s;
+}
+.pres-b:hover{background:var(--blue-d);color:#fff;border-color:var(--blue-d)}
+.pres-cnt{
+  position:fixed;bottom:1.2rem;left:1.2rem;background:rgba(15,23,42,.75);
+  backdrop-filter:blur(8px);color:#fff;padding:.3rem .8rem;border-radius:50px;
+  font-size:.75rem;font-weight:600;z-index:1000;opacity:0;transition:opacity .3s;
+}
+.pres-cnt.show{opacity:1}
+
+/* ── Responsive ──────────── */
+@media(max-width:640px){
+  .sec{padding:3rem 1rem}
+  .hero{padding:4rem 1rem 6rem}
+  .hero-ring{width:170px;height:170px}
+  .hero-photo{width:158px;height:158px}
+  .hero-orb{width:36px;height:36px}
+  .hero-orb svg{width:16px;height:16px}
+  .meth-flow{grid-template-columns:1fr 1fr}
+  .ai-box{grid-template-columns:1fr}
+  .rw-box{grid-template-columns:1fr}
+  .tl-grid{gap:1rem}
+  .cmp th,.cmp td{padding:.5rem .3rem;font-size:.7rem}
+}
+@media print{.pres-ctrl,.pres-cnt{display:none!important}.sec{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══ -->
+<section class="sec hero" id="abertura">
+  <div class="hero-glow"></div>
+  <div class="sec-inner">
+    <div class="hero-grid">
+      <div class="hero-photo-wrap">
+        <div class="hero-ring">
+          <img src="data:image/jpeg;base64,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" alt="Lucca Lemos, professor do Integrando" class="hero-photo" width="208" height="208" loading="eager">
+          <!-- Subject orbs floating around photo -->
+          <div class="hero-orb hero-orb-mat" title="Matemática"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4.745 3A23.933 23.933 0 003 12c0 3.183.62 6.22 1.745 9M19.255 3c1.125 2.78 1.745 5.817 1.745 9s-.62 6.22-1.745 9M12 3v18"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="hero-orb hero-orb-fis" title="Física"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div>
+          <div class="hero-orb hero-orb-qui" title="Química"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082"/></svg></div>
+        </div>
+      </div>
+      <div class="hero-text">
+        <div class="hero-brand"><span class="int">∫</span> Integrando</div>
+        <div class="hero-slogan">∫ estudo dt = aprendizado</div>
+        <p class="hero-desc">Aulas particulares de exatas para quem quer entender de verdade. Do ensino fundamental ao médio, com plano feito sob medida para cada aluno.</p>
+        <div class="hero-subjects">
+          <span class="hero-subj">Matemática</span>
+          <span class="hero-subj">Física</span>
+          <span class="hero-subj">Química</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center">
+          <a href="#metodologia" class="btn btn-light">Conhecer a metodologia</a>
+          <a href="#contato" class="btn btn-ghost">Agendar bate-papo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave wave-blue"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C360,60 720,0 1080,30 C1260,45 1350,30 1440,30 L1440,60 L0,60 Z"/></svg></div>
+
+<!-- ═══ TRAJETÓRIA ═══ -->
+<section class="sec" id="trajetoria" style="background:var(--bg)">
+  <div class="sec-inner">
+    <span class="sec-label">Quem sou eu</span>
+    <h2 class="sec-title">Minha Trajetória</h2>
+    <p class="sec-subtitle">Da graduação em Engenharia Elétrica ao dia a dia com energia solar — e agora, ao ensino.</p>
+
+    <div class="tl-grid">
+      <div class="tl-card" onclick="this.classList.toggle('open')">
+        <div class="tl-icon">🎓</div>
+        <div>
+          <div class="tl-label">Graduação</div>
+          <div class="tl-title">Engenharia Elétrica — UFC <span class="arr">▶</span></div>
+        </div>
+        <div class="tl-detail">Formado com <strong>Magna Cum Laude</strong> pela Universidade Federal do Ceará. Uma base sólida em cálculo, física e resolução de problemas que hoje se transforma em metodologia de ensino.</div>
+      </div>
+      <div class="tl-card" onclick="this.classList.toggle('open')">
+        <div class="tl-icon">🔬</div>
+        <div>
+          <div class="tl-label">Mestrado</div>
+          <div class="tl-title">Engenharia Elétrica — UFC <span class="arr">▶</span></div>
+        </div>
+        <div class="tl-detail">Mestrado com pesquisa acadêmica e aprofundamento técnico — onde desenvolvi a capacidade de transformar conceitos complexos em explicações claras e acessíveis.</div>
+      </div>
+      <div class="tl-card" onclick="this.classList.toggle('open')">
+        <div class="tl-icon">📖</div>
+        <div>
+          <div class="tl-label">Educação na UFC</div>
+          <div class="tl-title">PET, Pró-ExaCTa e Pré-Engenharia <span class="arr">▶</span></div>
+        </div>
+        <div class="tl-detail">Durante a graduação, participei do <strong>PET Engenharia Elétrica</strong> (Programa de Educação Tutorial), onde desenvolvi projetos de ensino e pesquisa. No <strong>Pró-ExaCTa</strong>, ministrei aulas semanais de Física e Matemática para alunos de escolas públicas do ensino médio. No <strong>Pré-Engenharia</strong>, organizei e dei aulas introdutórias de Cálculo, Programação e Álgebra Linear para calouros de engenharia. <em>Ensinar faz parte da minha trajetória desde a universidade.</em></div>
+      </div>
+      <div class="tl-card" onclick="this.classList.toggle('open')">
+        <div class="tl-icon">☀️</div>
+        <div>
+          <div class="tl-label">Hoje</div>
+          <div class="tl-title">Analista de Performance — Energia Solar <span class="arr">▶</span></div>
+        </div>
+        <div class="tl-detail">Trabalho analisando o desempenho de usinas solares, usando matemática, física e dados todos os dias para gerar energia limpa de forma eficiente.</div>
+      </div>
+    </div>
+
+    <div class="rw-box">
+      <div>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue-d)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg> Exatas no mundo real</h3>
+        <p style="color:var(--text2);font-size:.92rem">Uma pergunta que ouço muito é <em>"pra que serve isso?"</em> — e eu vivo a resposta todos os dias.</p>
+        <p style="color:var(--text2);font-size:.92rem">Um <strong>painel solar</strong> transforma luz em eletricidade usando o <strong>efeito fotovoltaico</strong>. Para calcular quanta energia uma usina produz, uso <strong>funções</strong>, <strong>trigonometria</strong> (ângulo do sol), <strong>estatística</strong> (irradiação) e até <strong>química</strong> (degradação dos materiais).</p>
+        <p style="color:var(--text2);font-size:.92rem">Cada tema que você estuda na escola aparece no mundo real — e quando a gente enxerga isso, aprender vira outra coisa.</p>
+      </div>
+      <div class="solar-illustration" aria-label="Ilustração isométrica de painéis solares">
+<svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:360px;height:auto;">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FDB813" stop-opacity="0.3"/><stop offset="100%" stop-color="#4A90D9" stop-opacity="0.05"/></linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a3a5c"/><stop offset="100%" stop-color="#0d1f33"/></linearGradient>
+    <linearGradient id="panelLight" x1="0" y1="0" x2="0.5" y2="1"><stop offset="0%" stop-color="#4A90D9" stop-opacity="0.4"/><stop offset="100%" stop-color="transparent"/></linearGradient>
+    <linearGradient id="frame" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c0c0c0"/><stop offset="100%" stop-color="#888"/></linearGradient>
+  </defs>
+  <!-- Sun -->
+  <circle cx="320" cy="45" r="28" fill="#FDB813" opacity="0.9"/>
+  <circle cx="320" cy="45" r="40" fill="#FDB813" opacity="0.15"/>
+  <!-- Sun rays to panels -->
+  <line x1="305" y1="65" x2="230" y2="130" stroke="#FDB813" stroke-width="1.5" opacity="0.3" stroke-dasharray="6,4"/>
+  <line x1="310" y1="70" x2="170" y2="140" stroke="#FDB813" stroke-width="1.5" opacity="0.25" stroke-dasharray="6,4"/>
+  <line x1="315" y1="72" x2="110" y2="145" stroke="#FDB813" stroke-width="1.5" opacity="0.2" stroke-dasharray="6,4"/>
+  <!-- Ground shadow -->
+  <ellipse cx="175" cy="248" rx="130" ry="18" fill="#0d1f33" opacity="0.08"/>
+  <!-- Support posts (back) -->
+  <rect x="90" y="170" width="5" height="75" rx="2" fill="url(#frame)"/>
+  <rect x="245" y="170" width="5" height="75" rx="2" fill="url(#frame)"/>
+  <!-- Cross bar -->
+  <rect x="88" y="195" width="164" height="4" rx="2" fill="#aaa"/>
+  <!-- Support posts (front, shorter) -->
+  <rect x="68" y="205" width="4" height="40" rx="2" fill="#999"/>
+  <rect x="228" y="205" width="4" height="40" rx="2" fill="#999"/>
+  <!-- Panel 1 -->
+  <g transform="translate(60,120)">
+    <polygon points="0,50 80,10 160,50 80,90" fill="url(#panel)" stroke="#2a5a8a" stroke-width="1.5"/>
+    <polygon points="0,50 80,10 160,50 80,90" fill="url(#panelLight)"/>
+    <!-- Grid lines -->
+    <line x1="40" y1="30" x2="120" y2="30" stroke="#2a5a8a" stroke-width="0.5" transform="rotate(0,80,50)"/>
+    <line x1="27" y1="40" x2="133" y2="40" stroke="#2a5a8a" stroke-width="0.5"/>
+    <line x1="13" y1="50" x2="147" y2="50" stroke="#2a5a8a" stroke-width="0.5"/>
+    <line x1="27" y1="60" x2="133" y2="60" stroke="#2a5a8a" stroke-width="0.5"/>
+    <line x1="40" y1="70" x2="120" y2="70" stroke="#2a5a8a" stroke-width="0.5"/>
+    <line x1="40" y1="20" x2="40" y2="80" stroke="#2a5a8a" stroke-width="0.5"/>
+    <line x1="80" y1="10" x2="80" y2="90" stroke="#2a5a8a" stroke-width="0.5"/>
+    <line x1="120" y1="20" x2="120" y2="80" stroke="#2a5a8a" stroke-width="0.5"/>
+    <!-- Highlight reflection -->
+    <polygon points="45,35 80,20 95,27 60,42" fill="white" opacity="0.1"/>
+  </g>
+  <!-- Energy flow indicator -->
+  <g transform="translate(260,180)" opacity="0.7">
+    <circle cx="0" cy="0" r="14" fill="#4A90D9" opacity="0.15"/>
+    <path d="M-5,-8 L2,-1 L-2,-1 L5,8 L-2,1 L2,1 Z" fill="#4A90D9"/>
+  </g>
+  <!-- Label -->
+  <text x="275" y="210" fill="#4A90D9" font-size="9" font-weight="600" font-family="system-ui" text-anchor="middle">Energia</text>
+</svg>
+</div>
+    </div>
+
+    <p style="margin-top:1.5rem;text-align:center">
+      <a href="https://www.linkedin.com/in/eng-lucca-lemos/" target="_blank" rel="noopener" style="font-weight:600;font-size:.9rem">Conheça meu percurso profissional no LinkedIn →</a>
+    </p>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave wave-white"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,20 C480,55 960,0 1440,35 L1440,60 L0,60 Z" fill="#fff"/></svg></div>
+
+<!-- ═══ METODOLOGIA ═══ -->
+<section class="sec" id="metodologia" style="background:#fff">
+  <div class="sec-inner">
+    <span class="sec-label">Como funciona</span>
+    <h2 class="sec-title">Metodologia</h2>
+    <p class="sec-subtitle">Cada etapa é pensada para entregar resultado. Clique para saber mais.</p>
+
+    <div class="meth-flow">
+      <div class="meth-card" onclick="this.classList.toggle('open')">
+        <div class="meth-num">1</div>
+        <div class="meth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg></div>
+        <h3>Conversa Inicial</h3>
+        <div class="meth-detail">Bate-papo com pais e aluno para entender objetivos, dificuldades e rotina de estudos. Sem compromisso — é o primeiro passo para construir um plano que funciona.</div>
+      </div>
+      <div class="meth-card" onclick="this.classList.toggle('open')">
+        <div class="meth-num">2</div>
+        <div class="meth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15a2.25 2.25 0 012.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></div>
+        <h3>Simulados</h3>
+        <div class="meth-detail">Simulados periódicos elaborados por mim e analisados com apoio de <strong>inteligência artificial</strong>: a IA identifica padrões nos erros, mapeia pontos fortes e fracos e sugere caminhos de melhoria — tudo revisado por mim.</div>
+      </div>
+      <div class="meth-card" onclick="this.classList.toggle('open')">
+        <div class="meth-num">3</div>
+        <div class="meth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 100-18 9 9 0 000 18z"/><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M12 3v3m0 12v3m9-9h-3M6 12H3"/></svg></div>
+        <h3>Plano Personalizado</h3>
+        <div class="meth-detail">Com base nos simulados e na prova-alvo, monto um plano de estudos sob medida: o que estudar, em que ordem e com que profundidade.</div>
+      </div>
+      <div class="meth-card" onclick="this.classList.toggle('open')">
+        <div class="meth-num">4</div>
+        <div class="meth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25"/></svg></div>
+        <h3>Aulas</h3>
+        <div class="meth-detail">Aulas individuais de 1 hora, presenciais ou online. Foco em entender o conceito, não em decorar fórmulas. Exercícios direcionados ao objetivo do aluno.</div>
+      </div>
+      <div class="meth-card" onclick="this.classList.toggle('open')">
+        <div class="meth-num">5</div>
+        <div class="meth-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></div>
+        <h3>Acompanhamento</h3>
+        <div class="meth-detail">Relatórios periódicos de evolução para os pais, incluindo <strong>análises geradas por IA</strong> a partir dos simulados: desempenho por tema, evolução ao longo do tempo e recomendações de foco.</div>
+      </div>
+    </div>
+
+    <div class="ai-box">
+      <div class="ai-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg></div>
+      <div>
+        <h3>Tecnologia a favor do aprendizado</h3>
+        <p>Utilizo <strong>inteligência artificial</strong> como ferramenta pedagógica: a partir dos resultados dos simulados, a IA analisa padrões de acerto e erro, identifica os temas que precisam de mais atenção e sugere estratégias personalizadas. Eu reviso e ajusto cada recomendação — a IA é a ferramenta, eu sou o professor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave wave-blue"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,40 C360,10 720,50 1080,20 C1260,10 1350,30 1440,25 L1440,60 L0,60 Z"/></svg></div>
+
+<!-- ═══ MAPA DE CONTEÚDOS ═══ -->
+<section class="sec" id="conteudos" style="background:var(--bg)">
+  <div class="sec-inner">
+    <span class="sec-label">Seção principal</span>
+    <h2 class="sec-title">Mapa de Conteúdos</h2>
+    <p class="sec-subtitle">Explore os temas mais cobrados em cada prova e veja como as bases do fundamental sustentam tudo.</p>
+
+    <div class="stabs">
+      <button class="stab active" onclick="showTab('grafico',this)">Gráfico de Temas</button>
+      <button class="stab" onclick="showTab('comp',this)">Comparativo de Provas</button>
+      <button class="stab" onclick="showTab('fund',this)">Do Fundamental ao Médio</button>
+    </div>
+
+    <div class="stab-c active" id="tab-grafico">
+      <div class="filters">
+        <div class="fg">
+          <span class="fg-label">Prova:</span>
+          <button class="fbtn active" data-prova="ENEM" onclick="setP(this)">ENEM</button>
+          <button class="fbtn" data-prova="UECE" onclick="setP(this)">UECE</button>
+          <button class="fbtn" data-prova="Unifor" onclick="setP(this)">Unifor</button>
+          <button class="fbtn" data-prova="FUVEST" onclick="setP(this)">FUVEST</button>
+          <button class="fbtn" data-prova="Unicamp" onclick="setP(this)">Unicamp</button>
+        </div>
+        <div class="fg">
+          <span class="fg-label">Matéria:</span>
+          <button class="fbtn active" data-materia="matematica" onclick="setM(this)">Matemática</button>
+          <button class="fbtn" data-materia="fisica" onclick="setM(this)">Física</button>
+          <button class="fbtn" data-materia="quimica" onclick="setM(this)">Química</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="topicsChart" role="img" aria-label="Gráfico de barras: temas mais cobrados"></canvas>
+        <p class="chart-note" id="chartNote"></p>
+      </div>
+      <div class="td-card" id="topicDetail"></div>
+    </div>
+
+    <div class="stab-c" id="tab-comp">
+      <div style="overflow-x:auto">
+        <table class="cmp"><thead><tr><th>Prova</th><th>Formato</th><th>Questões de Exatas</th><th>Fases</th><th>Perfil</th></tr></thead><tbody id="compBody"></tbody></table>
+      </div>
+    </div>
+
+    <div class="stab-c" id="tab-fund">
+      <p style="text-align:center;color:var(--text2);font-size:.9rem;margin-bottom:1rem">Cada base do fundamental sustenta vários temas cobrados nas provas. Fortalecer essas bases é o primeiro passo.</p>
+      <div class="found-grid" id="foundGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave -->
+<div class="wave wave-white"><svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,30 C480,0 960,55 1440,20 L1440,60 L0,60 Z" fill="#fff"/></svg></div>
+
+<!-- ═══ FAQ ═══ -->
+<section class="sec" id="faq" style="background:#fff">
+  <div class="sec-inner">
+    <span class="sec-label">Dúvidas</span>
+    <h2 class="sec-title">Perguntas Frequentes</h2>
+    <p class="sec-subtitle">As respostas para o que os pais mais perguntam.</p>
+    <div id="faqBox"></div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="sec cta-sec" id="contato">
+  <div class="sec-inner" style="position:relative;z-index:1">
+    <span class="sec-label">Próximo passo</span>
+    <h2 class="sec-title" style="color:#fff">Vamos Começar?</h2>
+    <p style="font-size:1.05rem;color:rgba(255,255,255,.8);max-width:500px;margin:0 auto 1rem;line-height:1.7">O primeiro passo é um bate-papo sem compromisso. Me conte sobre o aluno e eu explico como posso ajudar.</p>
+    <div class="cta-btns">
+      <a href="https://cal.com/integrando/primeiro-bate-papo" target="_blank" rel="noopener" class="btn btn-light">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Agendar primeiro bate-papo
+      </a>
+      <a href="https://wa.me/5585999546485?text=Ol%C3%A1%2C%20Lucca!%20Vi%20a%20apresenta%C3%A7%C3%A3o%20do%20Integrando%20e%20gostaria%20de%20saber%20mais%20sobre%20as%20aulas." target="_blank" rel="noopener" class="btn btn-wpp">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar pelo WhatsApp
+      </a>
+    </div>
+    <p style="margin-top:2.5rem;font-size:.8rem;color:rgba(255,255,255,.5)">Lucca Lemos · Engenheiro Eletricista · Mestre pela UFC</p>
+  </div>
+</section>
+
+<!-- Presentation controls -->
+<div class="pres-ctrl">
+  <button class="pres-b" onclick="go(-1)" title="← Seção anterior" aria-label="Seção anterior">↑</button>
+  <button class="pres-b" onclick="go(1)" title="→ Próxima seção" aria-label="Próxima seção">↓</button>
+  <button class="pres-b" onclick="fs()" title="F Tela cheia" aria-label="Tela cheia">⛶</button>
+</div>
+<div class="pres-cnt" id="pc"></div>
+
+<script>
+const D={"fonteNota": "Estimativa com base em análises de provas de 2020 a 2025. Dados aproximados — veja fontes.md para referências completas.", "provas": {"ENEM": {"nome": "ENEM", "formato": "180 questões objetivas (4 áreas de 45) + Redação", "questoesExatas": "~90 (45 Matemática + 45 Ciências da Natureza)", "fases": "Fase única (2 dias) + Redação", "perfil": "Interdisciplinar e contextualizado. Foco em interpretação de texto e aplicação prática.", "materias": {"matematica": [{"tema": "Aritmética e Matemática Básica", "pct": 37, "serie": "6º ao 9º ano", "dif": 2, "desc": "Porcentagem, regra de três, razão e proporção, operações com frações e decimais.", "questao": "Um reservatório contém 800 litros de água. Após uma semana de seca, o volume caiu 15%. Quantos litros restaram?", "alternativas": ["680 L", "660 L", "720 L", "700 L"], "resposta": 0}, {"tema": "Estatística e Probabilidade", "pct": 15, "serie": "2º e 3º EM", "dif": 3, "desc": "Média, mediana, moda, desvio padrão, análise de gráficos e tabelas, probabilidade.", "questao": "Em uma turma, as notas de 5 alunos foram: 6, 7, 8, 7, 2. Qual a mediana?", "alternativas": ["6", "7", "8", "6,5"], "resposta": 1}, {"tema": "Geometria Espacial", "pct": 12, "serie": "2º e 3º EM", "dif": 3, "desc": "Volume e área de sólidos: cilindro, cone, esfera, prismas e pirâmides.", "questao": "Um cilindro tem raio 3 cm e altura 10 cm. Qual seu volume? (Use π ≈ 3,14)", "alternativas": ["282,6 cm³", "188,4 cm³", "94,2 cm³", "314 cm³"], "resposta": 0}, {"tema": "Funções", "pct": 10, "serie": "1º EM", "dif": 3, "desc": "Funções do 1º e 2º grau, exponencial e logarítmica. Gráficos e interpretação.", "questao": "Uma função f(x) = 2x − 6 se anula quando x vale:", "alternativas": ["2", "3", "−3", "6"], "resposta": 1}, {"tema": "Geometria Plana", "pct": 8, "serie": "9º ano / 1º EM", "dif": 2, "desc": "Áreas, perímetros, semelhança de triângulos, teorema de Pitágoras, circunferência.", "questao": "Um terreno retangular tem 12 m de comprimento e 8 m de largura. Qual a área e o perímetro?", "alternativas": ["96 m² e 40 m", "80 m² e 40 m", "96 m² e 20 m", "80 m² e 20 m"], "resposta": 0}], "fisica": [{"tema": "Eletrodinâmica", "pct": 21, "serie": "3º EM", "dif": 3, "desc": "Circuitos elétricos, resistores, lei de Ohm, potência elétrica, consumo de energia.", "questao": "Um chuveiro de 5500 W funciona 20 minutos por dia. Quantos kWh consome em 30 dias?", "alternativas": ["55 kWh", "110 kWh", "27,5 kWh", "33 kWh"], "resposta": 0}, {"tema": "Termologia", "pct": 16, "serie": "2º EM", "dif": 3, "desc": "Calorimetria, escalas termométricas, dilatação, transferência de calor, termodinâmica.", "questao": "Quantas calorias são necessárias para aquecer 200 g de água de 20 °C a 70 °C? (c = 1 cal/g·°C)", "alternativas": ["10.000 cal", "5.000 cal", "14.000 cal", "7.000 cal"], "resposta": 0}, {"tema": "Ondulatória", "pct": 14, "serie": "2º EM", "dif": 3, "desc": "Ondas mecânicas e eletromagnéticas, som, luz, frequência, comprimento de onda.", "questao": "Uma onda sonora tem frequência de 340 Hz e se propaga a 340 m/s. Qual seu comprimento de onda?", "alternativas": ["0,5 m", "1 m", "2 m", "10 m"], "resposta": 1}, {"tema": "Cinemática", "pct": 12, "serie": "1º EM", "dif": 2, "desc": "MRU, MRUV, queda livre, velocidade, aceleração, gráficos de movimento.", "questao": "Um carro parte do repouso e acelera a 2 m/s². Qual sua velocidade após 5 segundos?", "alternativas": ["5 m/s", "10 m/s", "15 m/s", "25 m/s"], "resposta": 1}, {"tema": "Óptica", "pct": 9, "serie": "2º EM", "dif": 2, "desc": "Reflexão, refração, espelhos, lentes, fenômenos luminosos.", "questao": "Qual fenômeno explica a decomposição da luz branca ao passar por um prisma?", "alternativas": ["Reflexão total", "Difração", "Dispersão", "Polarização"], "resposta": 2}], "quimica": [{"tema": "Propriedades da Matéria", "pct": 14, "serie": "9º ano / 1º EM", "dif": 2, "desc": "Estados físicos, propriedades gerais e específicas, substâncias e misturas.", "questao": "O ponto de fusão do gelo é 0 °C a 1 atm. Isso é uma propriedade:", "alternativas": ["Geral", "Específica", "Extensiva", "Funcional"], "resposta": 1}, {"tema": "Estequiometria", "pct": 12, "serie": "1º EM", "dif": 4, "desc": "Cálculos com massa molar, relações entre reagentes e produtos, rendimento.", "questao": "Na reação 2H₂ + O₂ → 2H₂O, quantos mols de água se formam a partir de 4 mols de H₂?", "alternativas": ["2 mols", "4 mols", "8 mols", "1 mol"], "resposta": 1}, {"tema": "Química Orgânica", "pct": 11, "serie": "3º EM", "dif": 3, "desc": "Funções orgânicas, nomenclatura, isomeria, reações orgânicas.", "questao": "A função orgânica presente no etanol (CH₃CH₂OH) é:", "alternativas": ["Aldeído", "Cetona", "Álcool", "Éter"], "resposta": 2}, {"tema": "Separação de Misturas", "pct": 9, "serie": "9º ano / 1º EM", "dif": 1, "desc": "Filtração, destilação, decantação, cromatografia, centrifugação.", "questao": "Para separar água e óleo, o método mais adequado é:", "alternativas": ["Filtração", "Destilação", "Decantação", "Evaporação"], "resposta": 2}, {"tema": "Termoquímica", "pct": 8, "serie": "2º EM", "dif": 3, "desc": "Entalpia, reações exo e endotérmicas, lei de Hess, energia de ligação.", "questao": "Uma reação que libera calor para o ambiente é chamada de:", "alternativas": ["Endotérmica", "Exotérmica", "Isotérmica", "Adiabática"], "resposta": 1}]}}, "UECE": {"nome": "UECE", "formato": "1ª fase: 85 questões objetivas (4 alternativas). 2ª fase: redação + provas específicas", "questoesExatas": "26 (10 Mat + 8 Fís + 8 Quím) na 1ª fase; mais na 2ª fase (conforme o curso)", "fases": "Duas fases", "perfil": "Provas diretas e conteudistas. Exige cálculo preciso e domínio teórico sólido.", "materias": {"matematica": [{"tema": "Funções", "pct": 20, "serie": "1º EM", "dif": 3, "desc": "Função afim, quadrática, exponencial, logarítmica, modular. Domínio, imagem e gráficos.", "questao": "O vértice da parábola f(x) = x² − 4x + 3 tem coordenadas:", "alternativas": ["(2, −1)", "(−2, 1)", "(4, 3)", "(1, 0)"], "resposta": 0}, {"tema": "Polinômios", "pct": 15, "serie": "3º EM", "dif": 4, "desc": "Operações, teorema do resto, raízes, relações de Girard.", "questao": "O resto da divisão de P(x) = x³ − 2x + 1 por (x − 1) é:", "alternativas": ["0", "1", "−1", "2"], "resposta": 0}, {"tema": "Geometria Analítica", "pct": 14, "serie": "3º EM", "dif": 4, "desc": "Reta, circunferência, cônicas, distância entre pontos, equações.", "questao": "A distância entre os pontos A(1, 2) e B(4, 6) é:", "alternativas": ["4", "5", "6", "7"], "resposta": 1}, {"tema": "Trigonometria", "pct": 12, "serie": "2º EM", "dif": 3, "desc": "Funções trigonométricas, identidades, equações, triângulos.", "questao": "Qual o valor de sen 30° + cos 60°?", "alternativas": ["0", "1", "√2", "√3/2"], "resposta": 1}, {"tema": "Matrizes e Determinantes", "pct": 10, "serie": "2º EM", "dif": 3, "desc": "Operações com matrizes, cálculo de determinantes, sistemas lineares.", "questao": "O determinante da matriz [[2, 1], [4, 3]] é:", "alternativas": ["2", "10", "6", "−2"], "resposta": 0}], "fisica": [{"tema": "Mecânica (Leis de Newton)", "pct": 22, "serie": "1º EM", "dif": 3, "desc": "As três leis de Newton, força peso, normal, atrito, plano inclinado.", "questao": "Um bloco de 5 kg está sobre uma mesa sem atrito. Que força é necessária para acelerá-lo a 3 m/s²?", "alternativas": ["10 N", "15 N", "8 N", "25 N"], "resposta": 1}, {"tema": "Circuitos Elétricos", "pct": 16, "serie": "3º EM", "dif": 3, "desc": "Associação de resistores, lei de Ohm, potência, geradores.", "questao": "Dois resistores de 10 Ω em paralelo possuem resistência equivalente de:", "alternativas": ["20 Ω", "10 Ω", "5 Ω", "15 Ω"], "resposta": 2}, {"tema": "Eletromagnetismo", "pct": 14, "serie": "3º EM", "dif": 4, "desc": "Campo magnético, força magnética, indução eletromagnética, lei de Faraday.", "questao": "Uma carga positiva se move para a direita em um campo magnético apontando para cima. A força magnética aponta para:", "alternativas": ["Cima", "Baixo", "Fora da tela", "Dentro da tela"], "resposta": 2}, {"tema": "Termodinâmica", "pct": 12, "serie": "2º EM", "dif": 3, "desc": "Leis da termodinâmica, transformações gasosas, máquinas térmicas.", "questao": "Em uma transformação isotérmica de um gás ideal, a temperatura:", "alternativas": ["Aumenta", "Diminui", "Permanece constante", "Dobra"], "resposta": 2}, {"tema": "Dinâmica (Energia)", "pct": 10, "serie": "1º EM", "dif": 3, "desc": "Trabalho, energia cinética, potencial, conservação de energia, potência.", "questao": "Um objeto de 2 kg cai de 5 m de altura. Qual sua energia cinética ao chegar ao chão? (g = 10 m/s²)", "alternativas": ["50 J", "100 J", "20 J", "200 J"], "resposta": 1}], "quimica": [{"tema": "Tabela Periódica", "pct": 16, "serie": "1º EM", "dif": 2, "desc": "Classificação dos elementos, propriedades periódicas, famílias e períodos.", "questao": "O raio atômico de um elemento tende a aumentar quando se desce em um grupo porque:", "alternativas": ["Aumenta o nº de prótons", "Diminui a eletronegatividade", "Aumenta o nº de camadas eletrônicas", "Diminui a massa atômica"], "resposta": 2}, {"tema": "Estequiometria", "pct": 14, "serie": "1º EM", "dif": 4, "desc": "Cálculos envolvendo massas, volumes e quantidades de matéria em reações químicas.", "questao": "Quantos gramas de H₂O se formam pela reação de 4 g de H₂ com O₂ em excesso? (H=1, O=16)", "alternativas": ["18 g", "36 g", "72 g", "9 g"], "resposta": 1}, {"tema": "Estrutura Atômica", "pct": 12, "serie": "9º ano / 1º EM", "dif": 2, "desc": "Modelos atômicos, número atômico e de massa, isótopos, distribuição eletrônica.", "questao": "Um átomo com 11 prótons e 12 nêutrons tem número de massa:", "alternativas": ["11", "12", "23", "1"], "resposta": 2}, {"tema": "Química Orgânica", "pct": 11, "serie": "3º EM", "dif": 3, "desc": "Funções orgânicas, nomenclatura IUPAC, isomeria, cadeias carbônicas.", "questao": "O composto CH₃COOH pertence à função orgânica:", "alternativas": ["Álcool", "Aldeído", "Ácido carboxílico", "Éster"], "resposta": 2}, {"tema": "Ligações Químicas", "pct": 10, "serie": "1º EM", "dif": 3, "desc": "Ligação iônica, covalente e metálica. Geometria molecular, polaridade.", "questao": "A ligação entre Na e Cl no NaCl é do tipo:", "alternativas": ["Covalente polar", "Covalente apolar", "Iônica", "Metálica"], "resposta": 2}]}}, "Unifor": {"nome": "Unifor", "formato": "60 questões objetivas (5 alternativas) + Redação, fase única", "questoesExatas": "~30 (15 Matemática + 15 Ciências da Natureza)", "fases": "Fase única", "perfil": "Prova objetiva e direta. Boa porta de entrada — valoriza fundamentos e raciocínio lógico.", "materias": {"matematica": [{"tema": "Aritmética e Proporção", "pct": 25, "serie": "6º ao 9º ano", "dif": 2, "desc": "Razão, proporção, regra de três, porcentagem, operações básicas.", "questao": "Se 3 camisetas custam R$ 120, quanto custam 7 camisetas?", "alternativas": ["R$ 240", "R$ 280", "R$ 300", "R$ 210"], "resposta": 1}, {"tema": "Funções", "pct": 18, "serie": "1º EM", "dif": 2, "desc": "Funções de 1º e 2º grau, gráficos, interpretação.", "questao": "O gráfico de f(x) = −x² + 4 cruza o eixo x nos pontos:", "alternativas": ["x = 2 e x = −2", "x = 4 e x = −4", "x = 0 e x = 4", "x = 1 e x = −1"], "resposta": 0}, {"tema": "Geometria Plana", "pct": 15, "serie": "9º ano / 1º EM", "dif": 2, "desc": "Áreas, perímetros, semelhança, Pitágoras.", "questao": "Um triângulo retângulo tem catetos de 3 cm e 4 cm. Qual a hipotenusa?", "alternativas": ["5 cm", "6 cm", "7 cm", "8 cm"], "resposta": 0}, {"tema": "Estatística", "pct": 12, "serie": "2º e 3º EM", "dif": 2, "desc": "Leitura de gráficos, média, mediana, moda.", "questao": "A média aritmética de 4, 6, 8, 10 e 12 é:", "alternativas": ["7", "8", "9", "10"], "resposta": 1}, {"tema": "Equações", "pct": 10, "serie": "7º ao 9º ano", "dif": 2, "desc": "Equações do 1º e 2º grau, sistemas simples.", "questao": "Qual o valor de x na equação 3x + 9 = 0?", "alternativas": ["3", "−3", "9", "−9"], "resposta": 1}], "fisica": [{"tema": "Cinemática", "pct": 20, "serie": "1º EM", "dif": 2, "desc": "MRU, MRUV, gráficos de movimento.", "questao": "Um carro percorre 120 km em 2 horas com velocidade constante. Qual sua velocidade?", "alternativas": ["40 km/h", "50 km/h", "60 km/h", "80 km/h"], "resposta": 2}, {"tema": "Dinâmica", "pct": 18, "serie": "1º EM", "dif": 2, "desc": "Leis de Newton, peso, forças.", "questao": "Qual o peso de um objeto de 10 kg na superfície da Terra? (g = 10 m/s²)", "alternativas": ["10 N", "50 N", "100 N", "1000 N"], "resposta": 2}, {"tema": "Energia", "pct": 15, "serie": "1º EM", "dif": 2, "desc": "Trabalho, energia cinética e potencial, conservação.", "questao": "Uma bola de 0,5 kg é lançada para cima com velocidade de 10 m/s. Qual a energia cinética inicial?", "alternativas": ["25 J", "50 J", "10 J", "5 J"], "resposta": 0}, {"tema": "Eletricidade", "pct": 14, "serie": "3º EM", "dif": 2, "desc": "Circuitos básicos, lei de Ohm, potência.", "questao": "Uma lâmpada de 60 W ligada 5 horas por dia consome, em 30 dias:", "alternativas": ["9 kWh", "18 kWh", "90 kWh", "1,8 kWh"], "resposta": 0}, {"tema": "Termologia", "pct": 10, "serie": "2º EM", "dif": 2, "desc": "Temperatura, calor, escalas termométricas.", "questao": "A temperatura de 77 °F equivale, em Celsius, a:", "alternativas": ["20 °C", "25 °C", "30 °C", "35 °C"], "resposta": 1}], "quimica": [{"tema": "Propriedades da Matéria", "pct": 18, "serie": "9º ano / 1º EM", "dif": 1, "desc": "Estados físicos, mudanças de estado, substâncias puras e misturas.", "questao": "A passagem do estado sólido diretamente para o gasoso chama-se:", "alternativas": ["Evaporação", "Fusão", "Sublimação", "Condensação"], "resposta": 2}, {"tema": "Estequiometria", "pct": 14, "serie": "1º EM", "dif": 3, "desc": "Balanceamento, relações molares, massa molar.", "questao": "Na reação balanceada N₂ + 3H₂ → 2NH₃, quantos mols de H₂ reagem com 2 mols de N₂?", "alternativas": ["3 mols", "6 mols", "2 mols", "9 mols"], "resposta": 1}, {"tema": "Química Orgânica", "pct": 12, "serie": "3º EM", "dif": 2, "desc": "Identificação de funções orgânicas, nomenclatura básica.", "questao": "O etano (C₂H₆) é classificado como:", "alternativas": ["Alceno", "Alcino", "Alcano", "Álcool"], "resposta": 2}, {"tema": "Soluções", "pct": 10, "serie": "2º EM", "dif": 3, "desc": "Concentração, diluição, solubilidade.", "questao": "Dissolvendo 20 g de sal em 180 g de água, a concentração em massa é:", "alternativas": ["10%", "11,1%", "20%", "9%"], "resposta": 0}, {"tema": "Reações Químicas", "pct": 10, "serie": "1º EM", "dif": 2, "desc": "Tipos de reação, evidências, balanceamento.", "questao": "A combustão completa do metano (CH₄) produz:", "alternativas": ["CO + H₂O", "CO₂ + H₂O", "C + H₂O", "CO₂ + H₂"], "resposta": 1}]}}, "FUVEST": {"nome": "FUVEST", "formato": "1ª fase: 90 questões objetivas (5 alternativas). 2ª fase: discursivas + redação", "questoesExatas": "~30 de exatas na 1ª fase; 2ª fase varia por curso (até 12 questões discursivas)", "fases": "Duas fases", "perfil": "Alta exigência. Questões elaboradas que exigem raciocínio profundo e conexão entre conceitos.", "materias": {"matematica": [{"tema": "Funções", "pct": 17, "serie": "1º EM", "dif": 4, "desc": "Função afim, quadrática, exponencial, logarítmica, compostas e inversas.", "questao": "Se f(x) = 2ˣ, então f(3) − f(1) vale:", "alternativas": ["4", "6", "2", "8"], "resposta": 1}, {"tema": "Geometria Plana", "pct": 15, "serie": "9º ano / 1º EM", "dif": 4, "desc": "Semelhança, congruência, áreas compostas, relações métricas, circunferência.", "questao": "Em um triângulo equilátero de lado 6, a altura mede:", "alternativas": ["3√3", "6√3", "3√2", "6"], "resposta": 0}, {"tema": "Aritmética", "pct": 9, "serie": "6º ao 9º ano", "dif": 3, "desc": "Divisibilidade, MDC, MMC, números primos, raciocínio aritmético.", "questao": "O MDC de 36 e 48 é:", "alternativas": ["6", "12", "24", "36"], "resposta": 1}, {"tema": "Probabilidade", "pct": 8, "serie": "2º e 3º EM", "dif": 4, "desc": "Espaço amostral, eventos, probabilidade condicional, combinatória.", "questao": "Ao lançar dois dados, a probabilidade de a soma ser 7 é:", "alternativas": ["1/6", "1/12", "5/36", "7/36"], "resposta": 0}, {"tema": "Geometria Espacial", "pct": 6, "serie": "2º e 3º EM", "dif": 4, "desc": "Volumes, áreas de superfície, seções planas, inscrição e circunscrição.", "questao": "O volume de uma esfera de raio 3 é (use π ≈ 3,14):", "alternativas": ["113,04", "84,78", "28,26", "36π"], "resposta": 3}], "fisica": [{"tema": "Termologia", "pct": 13, "serie": "2º EM", "dif": 4, "desc": "Calorimetria, termodinâmica, dilatação, mudanças de estado com cálculo.", "questao": "Um gás ideal sofre expansão isobárica, dobrando o volume. A temperatura final (em K) é:", "alternativas": ["O dobro da inicial", "Metade da inicial", "Igual à inicial", "O quádruplo da inicial"], "resposta": 0}, {"tema": "Trabalho e Energia", "pct": 12, "serie": "1º EM", "dif": 4, "desc": "Teorema trabalho-energia, conservação, potência, rendimento.", "questao": "Um motor de 1 kW ergue uma carga de 50 kg a 10 m de altura (g = 10 m/s²). O tempo mínimo é:", "alternativas": ["5 s", "10 s", "50 s", "500 s"], "resposta": 0}, {"tema": "Eletrodinâmica", "pct": 13, "serie": "3º EM", "dif": 4, "desc": "Circuitos mistos, geradores, capacitores, Kirchhoff.", "questao": "Três resistores de 6 Ω em paralelo possuem resistência equivalente de:", "alternativas": ["18 Ω", "6 Ω", "3 Ω", "2 Ω"], "resposta": 3}, {"tema": "Cinemática", "pct": 10, "serie": "1º EM", "dif": 3, "desc": "Movimento relativo, vetorial, lançamentos, gráficos elaborados.", "questao": "Um projétil é lançado horizontalmente de 80 m de altura com v = 30 m/s. O alcance é (g = 10 m/s²):", "alternativas": ["120 m", "60 m", "90 m", "150 m"], "resposta": 0}, {"tema": "Óptica", "pct": 8, "serie": "2º EM", "dif": 3, "desc": "Espelhos esféricos, lentes, formação de imagens, equação de Gauss.", "questao": "Um objeto está a 30 cm de um espelho côncavo de raio 20 cm. A imagem se forma a:", "alternativas": ["15 cm", "60 cm", "10 cm", "20 cm"], "resposta": 0}], "quimica": [{"tema": "Equilíbrio Químico", "pct": 11, "serie": "2º EM", "dif": 4, "desc": "Constante de equilíbrio, deslocamento (Le Chatelier), Kp e Kc.", "questao": "Ao aumentar a pressão sobre o equilíbrio N₂ + 3H₂ ⇌ 2NH₃, o sistema se desloca para:", "alternativas": ["A esquerda", "A direita (produtos)", "Não se desloca", "Depende da temperatura"], "resposta": 1}, {"tema": "Reações Orgânicas", "pct": 11, "serie": "3º EM", "dif": 4, "desc": "Substituição, adição, eliminação, oxidação, esterificação.", "questao": "A reação entre um ácido carboxílico e um álcool, com catalisador ácido, produz:", "alternativas": ["Aldeído + água", "Éster + água", "Éter + CO₂", "Cetona + água"], "resposta": 1}, {"tema": "Estequiometria", "pct": 9, "serie": "1º EM", "dif": 4, "desc": "Cálculos com pureza, rendimento, excesso, CNTP.", "questao": "Quantos litros de CO₂ (CNTP) se formam pela queima de 1 mol de C? (V molar = 22,4 L)", "alternativas": ["11,2 L", "22,4 L", "44,8 L", "33,6 L"], "resposta": 1}, {"tema": "Atomística", "pct": 9, "serie": "1º EM", "dif": 3, "desc": "Modelos atômicos, números quânticos, distribuição eletrônica, periodicidade.", "questao": "O subnível mais energético do átomo de ferro (Z=26) é:", "alternativas": ["4s²", "3d⁶", "3p⁶", "4p⁰"], "resposta": 1}, {"tema": "Eletroquímica", "pct": 7, "serie": "2º EM", "dif": 4, "desc": "Pilhas, eletrólise, potenciais de redução, equações de oxi-redução.", "questao": "Na eletrólise da água, o gás liberado no cátodo é:", "alternativas": ["Oxigênio", "Hidrogênio", "Cloro", "Nitrogênio"], "resposta": 1}]}}, "Unicamp": {"nome": "Unicamp", "formato": "1ª fase: 72 questões objetivas (4 alternativas). 2ª fase: 18 questões discursivas (2 dias)", "questoesExatas": "~33 (12 Mat + 21 CN divididos entre Fís, Quím e Bio) na 1ª fase; 2ª fase depende do curso", "fases": "Duas fases", "perfil": "Interdisciplinar. Valoriza interpretação, conexão entre áreas e resolução de problemas contextualizados.", "materias": {"matematica": [{"tema": "Funções", "pct": 16, "serie": "1º EM", "dif": 4, "desc": "Funções, composição, inversa, gráficos, modelagem de problemas.", "questao": "Se f(x) = 3x − 1 e g(x) = x², então g(f(2)) vale:", "alternativas": ["9", "25", "11", "36"], "resposta": 1}, {"tema": "Trigonometria", "pct": 10, "serie": "2º EM", "dif": 4, "desc": "Funções trigonométricas, identidades, equações trigonométricas, triângulos quaisquer.", "questao": "Em um triângulo com lados 5, 7 e 8, o cosseno do maior ângulo (oposto ao lado 8) vale:", "alternativas": ["1/7", "−1/7", "1/5", "−1/5"], "resposta": 0}, {"tema": "Geometria Plana", "pct": 8, "serie": "9º ano / 1º EM", "dif": 4, "desc": "Áreas compostas, relações métricas, polígonos, inscrição e circunscrição.", "questao": "A área de um hexágono regular de lado 2 é:", "alternativas": ["6√3", "12√3", "4√3", "8√3"], "resposta": 0}, {"tema": "Grandezas Proporcionais", "pct": 8, "serie": "7º ao 9º ano", "dif": 3, "desc": "Proporção, regra de três composta, escalas, problemas de raciocínio proporcional.", "questao": "Um mapa está na escala 1:50.000. A distância real entre dois pontos separados por 4 cm no mapa é:", "alternativas": ["2 km", "20 km", "200 m", "500 m"], "resposta": 0}, {"tema": "Geometria Analítica", "pct": 7, "serie": "3º EM", "dif": 4, "desc": "Reta, circunferência, posições relativas, distâncias, cônicas.", "questao": "A equação x² + y² − 6x + 4y − 12 = 0 representa uma circunferência de centro e raio:", "alternativas": ["C(3, −2), r = 5", "C(−3, 2), r = 5", "C(3, −2), r = 25", "C(6, −4), r = 12"], "resposta": 0}], "fisica": [{"tema": "Mecânica", "pct": 54, "serie": "1º EM", "dif": 4, "desc": "Cinemática, dinâmica, estática, gravitação, hidrostática — com forte contextualização.", "questao": "Um bloco de 2 kg desliza sem atrito por uma rampa de 3 m de altura. A velocidade na base é (g = 10 m/s²):", "alternativas": ["√60 m/s", "√30 m/s", "√20 m/s", "10 m/s"], "resposta": 0}, {"tema": "Eletricidade", "pct": 15, "serie": "3º EM", "dif": 4, "desc": "Eletrostática, circuitos, campo elétrico, capacitores.", "questao": "Duas cargas de +2 μC e −2 μC separadas por 1 m. O campo elétrico no ponto médio aponta:", "alternativas": ["Da positiva para a negativa", "Da negativa para a positiva", "Para cima", "É nulo"], "resposta": 0}, {"tema": "Termologia", "pct": 10, "serie": "2º EM", "dif": 3, "desc": "Calorimetria, gases, termodinâmica.", "questao": "Ao misturar 100 g de água a 80 °C com 100 g a 20 °C, a temperatura de equilíbrio é:", "alternativas": ["40 °C", "50 °C", "60 °C", "45 °C"], "resposta": 1}, {"tema": "Ondulatória", "pct": 7, "serie": "2º EM", "dif": 3, "desc": "Ondas, som, efeito Doppler, interferência.", "questao": "Duas ondas de mesma amplitude e frequência em fase produzem interferência:", "alternativas": ["Destrutiva", "Construtiva", "Nula", "Parcial"], "resposta": 1}, {"tema": "Óptica", "pct": 7, "serie": "2º EM", "dif": 3, "desc": "Lentes, espelhos, fenômenos ópticos.", "questao": "Uma lente convergente de distância focal 10 cm forma imagem real de um objeto a 30 cm. A distância da imagem é:", "alternativas": ["15 cm", "20 cm", "30 cm", "7,5 cm"], "resposta": 0}], "quimica": [{"tema": "Físico-Química", "pct": 35, "serie": "2º EM", "dif": 4, "desc": "Cinética, equilíbrio, eletroquímica, termoquímica, soluções — integrados com contexto ambiental.", "questao": "Dobrando a concentração de um reagente cuja ordem de reação é 2, a velocidade da reação:", "alternativas": ["Dobra", "Triplica", "Quadruplica", "Não muda"], "resposta": 2}, {"tema": "Química Geral", "pct": 28, "serie": "1º EM", "dif": 3, "desc": "Estrutura atômica, ligações, tabela periódica, reações inorgânicas.", "questao": "O número de oxidação do Mn no KMnO₄ é:", "alternativas": ["+4", "+7", "+2", "+5"], "resposta": 1}, {"tema": "Química Ambiental", "pct": 10, "serie": "2º e 3º EM", "dif": 3, "desc": "Poluição, chuva ácida, efeito estufa, tratamento de água — integrados com conceitos químicos.", "questao": "A chuva ácida é causada principalmente pela dissolução na água de:", "alternativas": ["CO₂ e N₂", "SO₂ e NOₓ", "O₃ e CH₄", "H₂ e Cl₂"], "resposta": 1}, {"tema": "Química Orgânica", "pct": 8, "serie": "3º EM", "dif": 3, "desc": "Funções orgânicas, polímeros, bioquímica básica.", "questao": "A sacarose é formada pela ligação entre:", "alternativas": ["Dois aminoácidos", "Glicose e frutose", "Duas moléculas de glicose", "Glicose e galactose"], "resposta": 1}, {"tema": "Atomística", "pct": 5, "serie": "1º EM", "dif": 3, "desc": "Modelos atômicos, espectros, configuração eletrônica.", "questao": "O modelo atômico que introduziu os níveis de energia quantizados foi proposto por:", "alternativas": ["Dalton", "Thomson", "Rutherford", "Bohr"], "resposta": 3}]}}}, "fundamentoBase": [{"base": "Frações e Decimais", "serie": "6º–7º ano", "avancado": ["Razão e Proporção", "Funções", "Estequiometria"], "desc": "Operar com frações é a fundação para proporções, funções e cálculos químicos."}, {"base": "Equações do 1º Grau", "serie": "7º ano", "avancado": ["Equações do 2º Grau", "Sistemas Lineares", "Cinemática (MRU)"], "desc": "Resolver equações simples abre caminho para problemas mais complexos em matemática e física."}, {"base": "Proporção e Regra de Três", "serie": "7º–8º ano", "avancado": ["Estatística", "Estequiometria", "Escalas Termométricas"], "desc": "A noção de proporcionalidade conecta matemática, química e física de forma direta."}, {"base": "Potenciação e Radiciação", "serie": "8º ano", "avancado": ["Funções Exponenciais", "Notação Científica", "Energia"], "desc": "Potências e raízes são essenciais para funções avançadas e grandezas em física."}, {"base": "Geometria Básica", "serie": "6º–8º ano", "avancado": ["Geometria Plana", "Geometria Espacial", "Trigonometria"], "desc": "Área, perímetro e ângulos são a base para toda a geometria do ensino médio."}, {"base": "Unidades de Medida", "serie": "6º–7º ano", "avancado": ["Cinemática", "Termodinâmica", "Soluções (concentração)"], "desc": "Converter unidades é fundamental para qualquer cálculo em física e química."}]};
+const FAQ=[{"q": "Como funcionam as aulas?", "a": "As aulas são <strong>individuais</strong>, com duração de <strong>1 hora</strong>, e podem ser <strong>presenciais ou online</strong> — o que for melhor para o aluno. O conteúdo é definido a partir de um plano personalizado, que leva em conta a prova-alvo, as dificuldades específicas e o ritmo de cada um.", "icon": "M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18c-2.305 0-4.408.867-6 2.292m0-14.25v14.25"}, {"q": "Qual a frequência ideal?", "a": "O mais comum é <strong>1 a 3 aulas por semana</strong>, dependendo do objetivo e da disponibilidade. Conversamos sobre isso no primeiro bate-papo.", "icon": "M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"}, {"q": "Para qual faixa etária / série?", "a": "Atendo alunos do <strong>ensino fundamental ao ensino médio</strong>, nas disciplinas de <strong>Matemática, Física e Química</strong>. Conteúdos específicos e necessidades de cada série são discutidos no bate-papo inicial.", "icon": "M4.26 10.147a60.438 60.438 0 00-.491 6.347A48.62 48.62 0 0112 20.904a48.62 48.62 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.636 50.636 0 00-2.658-.813A59.906 59.906 0 0112 3.493a59.903 59.903 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5"}, {"q": "Como acompanho a evolução do meu filho?", "a": "Você receberá <strong>relatórios periódicos</strong> sobre o progresso — com análises geradas por IA a partir dos simulados: desempenho por tema, evolução ao longo do tempo e recomendações de foco. Mantenho comunicação aberta e direta com os pais.", "icon": "M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"}, {"q": "Quanto custa?", "a": "[PREENCHER] <em>— Os valores são discutidos no primeiro bate-papo, de acordo com a frequência e o formato escolhidos.</em>", "icon": "M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"}, {"q": "Como funciona o primeiro contato?", "a": "Tudo começa com um <strong>bate-papo sem compromisso</strong> — uma conversa comigo para entender as necessidades do aluno, explicar a metodologia e alinhar expectativas. Pode ser online ou presencial. <a href='https://cal.com/integrando/primeiro-bate-papo' target='_blank' rel='noopener' style='color:var(--blue);font-weight:600'>Agende aqui →</a>", "icon": "M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"}, {"q": "Precisa instalar algum aplicativo?", "a": "Não! Para aulas online uso ferramentas que rodam no navegador, como Google Meet e uma lousa digital. Para aulas presenciais, só caderno e material escolar.", "icon": "M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"}];
+const MN={matematica:"Matemática",fisica:"Física",quimica:"Química"};
+const MC={matematica:{bg:"rgba(74,144,217,.7)",bd:"#4A90D9"},fisica:{bg:"rgba(245,158,11,.7)",bd:"#f59e0b"},quimica:{bg:"rgba(16,185,129,.7)",bd:"#10b981"}};
+let cP="ENEM",cM="matematica",ch=null;
+const secs=document.querySelectorAll(".sec");
+let cS=0;
+
+function buildChart(){
+  const t=D.provas[cP].materias[cM],l=t.map(x=>x.tema),v=t.map(x=>x.pct),c=MC[cM];
+  if(ch)ch.destroy();
+  ch=new Chart(document.getElementById("topicsChart"),{
+    type:"bar",
+    data:{labels:l,datasets:[{label:MN[cM]+" — "+cP,data:v,backgroundColor:c.bg,borderColor:c.bd,borderWidth:2,borderRadius:8,barPercentage:.65}]},
+    options:{
+      indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:x=>x.raw+"% das questões"}}},
+      scales:{
+        x:{beginAtZero:true,max:Math.max(...v)+10,ticks:{callback:v=>v+"%",font:{family:"Inter"}},grid:{color:"#f1f5f9"}},
+        y:{grid:{display:false},ticks:{font:{size:12,weight:"600",family:"Inter"}}}
+      },
+      onClick:(e,els)=>{if(els.length)showTD(els[0].index)}
+    }
+  });
+  document.getElementById("chartNote").textContent=D.fonteNota;
+  document.getElementById("topicDetail").classList.remove("show");
+}
+
+function showTD(i){
+  const t=D.provas[cP].materias[cM][i];
+  const dd=Array.from({length:5},(_,j)=>`<span class="${j<t.dif?'on':''}"></span>`).join("");
+  const al=t.alternativas.map((a,j)=>`<div class="alt ${j===t.resposta?'ok':''}">${String.fromCharCode(65+j)}) ${a}${j===t.resposta?' ✓':''}</div>`).join("");
+  const el=document.getElementById("topicDetail");
+  el.innerHTML=`<h3>${t.tema}</h3><div class="td-meta"><span>📚 ${t.serie}</span><span>Dificuldade: <span class="diff-dots">${dd}</span></span><span>${MN[cM]}</span></div><p style="color:var(--text2);font-size:.9rem">${t.desc}</p><div class="td-q"><p>Exemplo de questão (estilo ${cP}):</p><p style="font-weight:400;font-size:.88rem;margin-bottom:.4rem">${t.questao}</p>${al}</div>`;
+  el.classList.add("show");
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function setP(b){document.querySelectorAll("[data-prova]").forEach(x=>x.classList.remove("active"));b.classList.add("active");cP=b.dataset.prova;buildChart()}
+function setM(b){document.querySelectorAll("[data-materia]").forEach(x=>x.classList.remove("active"));b.classList.add("active");cM=b.dataset.materia;buildChart()}
+
+function showTab(id,btn){
+  document.querySelectorAll(".stab").forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".stab-c").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("tab-"+id).classList.add("active");
+  if(id==="grafico")buildChart();
+}
+
+function buildComp(){
+  document.getElementById("compBody").innerHTML=Object.values(D.provas).map(p=>`<tr><td><strong>${p.nome}</strong></td><td>${p.formato}</td><td>${p.questoesExatas}</td><td>${p.fases}</td><td>${p.perfil}</td></tr>`).join("");
+}
+
+function buildFound(){
+  document.getElementById("foundGrid").innerHTML=D.fundamentoBase.map(f=>`<div class="found-card"><h4>${f.base}</h4><span class="found-badge">${f.serie}</span><p>${f.desc}</p><div class="found-arrows">${f.avancado.map(a=>`<span>→ ${a}</span>`).join("")}</div></div>`).join("");
+}
+
+function buildFAQ(){
+  document.getElementById("faqBox").innerHTML=FAQ.map(f=>`<div class="faq-card" onclick="toggleFAQ(this)"><div class="faq-q" role="button" tabindex="0" aria-expanded="false"><div class="faq-q-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="${f.icon}"/></svg></div><span>${f.q}</span><span class="plus">+</span></div><div class="faq-a"><div class="faq-a-in">${f.a}</div></div></div>`).join("");
+}
+function toggleFAQ(el){const o=el.classList.contains("open");el.parentElement.querySelectorAll(".faq-card").forEach(f=>f.classList.remove("open"));if(!o)el.classList.add("open")}
+
+// Presentation
+function go(d){cS=Math.max(0,Math.min(secs.length-1,cS+d));secs[cS].scrollIntoView({behavior:"smooth"});showCnt()}
+function showCnt(){const e=document.getElementById("pc");e.textContent=(cS+1)+"/"+secs.length;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),2000)}
+function fs(){if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});else document.exitFullscreen()}
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();go(1)}
+  if(e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();go(-1)}
+  if((e.key==="f"||e.key==="F")&&e.target.tagName!=="INPUT")fs();
+});
+let st;window.addEventListener("scroll",()=>{clearTimeout(st);st=setTimeout(()=>{const y=window.scrollY+window.innerHeight/2;secs.forEach((s,i)=>{if(y>=s.offsetTop&&y<s.offsetTop+s.offsetHeight)cS=i})},100)});
+
+buildChart();buildComp();buildFound();buildFAQ();
+</script>
+</body>
+</html>
